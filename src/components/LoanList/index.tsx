@@ -5,6 +5,7 @@ import Button from "../Button";
 import PickList from "../PickList";
 import { IUsers } from "../../models/interfaces";
 import { useJsonData } from "../../hooks/useJsonData";
+import { toBRLCurrency } from "../../utils/toBRLCurrency";
 
 const LoanList: React.FC = () => {
   const [list, setList] = useState<IUsers[]>([]);
@@ -45,8 +46,8 @@ const LoanList: React.FC = () => {
                 </td>
                 <td>{user.name}</td>
                 <td>{user.cpf}</td>
-                <td>{user.salary}</td>
-                <td>{user.value}</td>
+                <td>{toBRLCurrency(user.salary)}</td>
+                <td>{toBRLCurrency(user.value)}</td>
                 <td>00</td>
                 <td>00</td>
               </tr>
