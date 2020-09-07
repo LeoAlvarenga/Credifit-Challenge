@@ -6,6 +6,7 @@ export interface IUsers {
   salary: string;
   value: string;
   companyId: string;
+  status: string | null;
 }
 
 export interface ICompanies {

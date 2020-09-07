@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { Modal } from "antd";
 
 import { Container, Table, ListFooter } from "./styles";
 import Button from "../Button";
@@ -10,12 +11,40 @@ import { toBRLCurrency } from "../../utils/toBRLCurrency";
 const LoanList: React.FC = () => {
   const [list, setList] = useState<IUsers[]>([]);
 
-  const { renderUsers } = useJsonData();
+  const {
+    renderUsers,
+    checkedIdList,
+    handleCheck,
+    modalVisibility,
+    setModalVisibility,
+    setOption,
+    option
+  } = useJsonData();
 
   useEffect(() => {
-    const newList = renderUsers.sort()
-    setList(renderUsers);
+    const newList = renderUsers.sort();
+    setList(newList);
   }, [renderUsers]);
+
+  useEffect(() => {
+    console.log(checkedIdList);
+  }, [checkedIdList]);
+
+  // const handleCheck = useCallback(
+  //   (userId: string) => {
+  //     if (checkedIdList.find((id) => id === userId)) {
+  //       setCheckedIdList(checkedIdList.filter((id) => id !== userId));
+  //       return;
+  //     } else {
+  //       checkedIdList.push(userId);
+  //       setCheckedIdList(checkedIdList);
+  //     }
+
+  //     const newArr = checkedIdList;
+  //   },
+  //   [checkedIdList, setCheckedIdList]
+  // );
+
   return (
     <Container>
       <Table>
@@ -40,9 +69,14 @@ const LoanList: React.FC = () => {
         <tbody>
           {list &&
             list.map((user) => (
-              <tr>
+              <tr key={user.id}>
                 <td>
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    value={user.id}
+                    onChange={(e) => handleCheck(e.currentTarget.value)}
+                    checked={!!checkedIdList.find((id) => id === user.id)}
+                  />
                 </td>
                 <td>{user.name}</td>
                 <td>{user.cpf}</td>
@@ -55,11 +89,20 @@ const LoanList: React.FC = () => {
         </tbody>
       </Table>
       <ListFooter>
-        <PickList>
-          <option value="#">Escolha uma opção... </option>
+        <PickList onChange={(e) => setOption(e.currentTarget.value)}>
+          <option value="">Escolha uma opção... </option>
+          <option value="approved">Aprovar</option>
+          <option value="rejected">Rejeitar</option>
         </PickList>
-        <Button>Nenhuma ação Selecionada</Button>
+        <Button
+          disabled={!(checkedIdList.length > 0 && option)}
+          disabledText="Nenhuma ação selecionada"
+          onClick={() => setModalVisibility(true)}
+        >
+          Confirmar
+        </Button>
       </ListFooter>
+      
     </Container>
   );
 };
