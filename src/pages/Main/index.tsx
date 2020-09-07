@@ -1,16 +1,31 @@
 import React from "react";
 
+import "antd/dist/antd.css";
 import { Container, Title, MainBody, MainFooter } from "./styles";
 import Header from "../../components/Header";
 import LoanList from "../../components/LoanList";
 import PaginationControl from "../../components/PaginationControl";
-import { Modal } from "antd";
-import 'antd/dist/antd.css';
+import { Modal, notification } from "antd";
 import { useJsonData } from "../../hooks/useJsonData";
 
 const Main: React.FC = () => {
+  const {
+    modalVisibility,
+    setModalVisibility,
+    option,
+    handleConfirm,
+    checkedIdList,
+  } = useJsonData();
 
-  const { modalVisibility, setModalVisibility, option, handleConfirm, checkedIdList } = useJsonData()
+  const openNotificationWithIcon = () => {
+    notification.open({
+      message: `${checkedIdList.length} Solicitações de empréstimo foram ${option === "approved" ? "aceitas" : "rejeitadas"} com sucesso`,
+      // description:
+      //   `${checkedIdList.length} Solicitações de empréstimo foram ${option === "approved" ? "aceitas" : "rejeitadas"} com sucesso`,
+        type: "success",
+        style: {background: "#F6FFED"}
+    });
+  };
 
   return (
     <Container>
@@ -29,6 +44,7 @@ const Main: React.FC = () => {
         onOk={() => {
           handleConfirm(option);
           setModalVisibility(false);
+          openNotificationWithIcon();
         }}
         onCancel={() => setModalVisibility(false)}
         okText="Confirmar"
