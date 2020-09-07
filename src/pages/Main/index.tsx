@@ -10,11 +10,11 @@ const Main: React.FC = () => {
     <Container>
       <Header />
       <MainBody>
-        <Title>Solicitações de Empréstimo</Title>
+        <Title>Solicitações de Empréstimo </Title>
         <LoanList />
-      <MainFooter>
-        <PaginationControl />
-      </MainFooter>
+        <MainFooter>
+          <PaginationControl />
+        </MainFooter>
       </MainBody>
     </Container>
   );
